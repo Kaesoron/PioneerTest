@@ -1,4 +1,4 @@
-package org.kaesoron;
+package org.kaesoron.pioneer_app;
 
 public class Main {
     public static void main(String[] args) {
