@@ -5,7 +5,7 @@ import org.kaesoron.pioneer_app.dto.*;
 import java.util.List;
 
 public interface UserService {
-    UserDto getCurrentUser();
+    UserDto getUserById(Long userId);
     List<UserDto> searchUsers(SearchFilterDto filter);
-    void updateCurrentUser(UserUpdateRequest request);
+    void updateUser(Long userId, UserUpdateRequest request);
 }

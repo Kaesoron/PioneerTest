@@ -17,7 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +27,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PhoneDataRepository phoneRepo;
     private final EmailDataRepository emailRepo;
-    private final JwtService jwtService;
 
     @Override
     @Cacheable("currentUser")
-    public UserDto getCurrentUser() {
-        Long userId = jwtService.getCurrentUserId();
+    public UserDto getUserById(Long userId) {
         return userRepository.findById(userId)
                 .map(UserMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -63,8 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateCurrentUser(UserUpdateRequest request) {
-        Long userId = jwtService.getCurrentUserId();
+    public void updateUser(Long userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
