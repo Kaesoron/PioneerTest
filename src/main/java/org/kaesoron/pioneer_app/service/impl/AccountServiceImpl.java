@@ -7,6 +7,8 @@ import org.kaesoron.pioneer_app.entity.User;
 import org.kaesoron.pioneer_app.repository.AccountRepository;
 import org.kaesoron.pioneer_app.repository.UserRepository;
 import org.kaesoron.pioneer_app.service.AccountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+    private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
@@ -23,6 +26,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public synchronized void transfer(Long fromUserId, Long toUserId, BigDecimal amount) {
+        log.info("Попытка перевода от {} к {} на сумму {}", fromUserId, toUserId, amount);
+
         if (fromUserId.equals(toUserId)) {
             throw new IllegalArgumentException("Cannot transfer to the same user");
         }
@@ -63,6 +68,8 @@ public class AccountServiceImpl implements AccountService {
     @Scheduled(fixedRate = 30000)
     @Transactional
     public void applyInterestToAllAccounts() {
+        log.info("Запланированное увеличение баланса счетов");
+
         List<Account> accounts = accountRepository.findAll();
 
         for (Account account : accounts) {

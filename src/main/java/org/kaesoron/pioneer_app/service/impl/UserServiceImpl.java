@@ -1,6 +1,10 @@
 package org.kaesoron.pioneer_app.service.impl;
 
-import org.kaesoron.pioneer_app.dto.*;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.kaesoron.pioneer_app.dto.SearchFilterDto;
+import org.kaesoron.pioneer_app.dto.UserDto;
+import org.kaesoron.pioneer_app.dto.UserUpdateRequest;
 import org.kaesoron.pioneer_app.entity.EmailData;
 import org.kaesoron.pioneer_app.entity.PhoneData;
 import org.kaesoron.pioneer_app.entity.User;
@@ -8,21 +12,20 @@ import org.kaesoron.pioneer_app.mapper.UserMapper;
 import org.kaesoron.pioneer_app.repository.EmailDataRepository;
 import org.kaesoron.pioneer_app.repository.PhoneDataRepository;
 import org.kaesoron.pioneer_app.repository.UserRepository;
-import org.kaesoron.pioneer_app.security.JwtService;
 import org.kaesoron.pioneer_app.service.UserService;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final PhoneDataRepository phoneRepo;
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable("currentUser")
     public UserDto getUserById(Long userId) {
+        log.info("Попытка получения пользователя {}", userId);
         return userRepository.findById(userId)
                 .map(UserMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -39,6 +43,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable("searchUsers")
     public List<UserDto> searchUsers(SearchFilterDto filter) {
+        log.info("Запрошен общий список пользователей");
+
         var pageable = PageRequest.of(filter.getPage(), filter.getSize());
 
         if (filter.getPhone() != null) {
@@ -63,6 +69,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(Long userId, UserUpdateRequest request) {
+        log.info("Попытка обновления пользователя {}", userId);
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
