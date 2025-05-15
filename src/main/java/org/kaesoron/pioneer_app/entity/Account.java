@@ -24,7 +24,4 @@ public class Account {
 
     @Column(nullable = false)
     private BigDecimal balance;
-
-    @Column(name = "initial_balance", nullable = false)
-    private BigDecimal initialBalance;
 }

@@ -25,5 +25,6 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: account
             baseColumnNames: user_id
-            referencedTableName: user
+            referencedTableName: users
             referencedColumnNames: id
+            constraintName: fk_account_users_id

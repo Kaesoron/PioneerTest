@@ -27,5 +27,6 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: email_data
             baseColumnNames: user_id
-            referencedTableName: user
+            referencedTableName: users
             referencedColumnNames: id
+            constraintName: fk_email_data_users_id

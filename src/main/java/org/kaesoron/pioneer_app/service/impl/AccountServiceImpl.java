@@ -60,8 +60,13 @@ public class AccountServiceImpl implements AccountService {
         fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
         toAccount.setBalance(toAccount.getBalance().add(amount));
 
+        log.info("Баланс отправителя = {}", fromAccount.getBalance());
+        log.info("Баланс получателя = {}", toAccount.getBalance());
+
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
+
+        log.info("Изменения балансов сохранены");
     }
 
     @Override
@@ -74,9 +79,8 @@ public class AccountServiceImpl implements AccountService {
 
         for (Account account : accounts) {
             BigDecimal current = account.getBalance();
-            BigDecimal initial = account.getInitialBalance();
 
-            BigDecimal maxBalance = initial.multiply(BigDecimal.valueOf(2.07));
+            BigDecimal maxBalance = current.multiply(BigDecimal.valueOf(2.07));
             if (current.compareTo(maxBalance) >= 0) {
                 continue;
             }

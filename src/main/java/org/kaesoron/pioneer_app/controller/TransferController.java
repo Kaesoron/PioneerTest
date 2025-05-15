@@ -20,7 +20,7 @@ public class TransferController {
     @PostMapping
     public void transfer(@AuthenticationPrincipal Jwt jwt,
                          @RequestBody TransferRequestDto request) {
-        Long fromUserId = Long.valueOf(jwt.getSubject());
+        Long fromUserId = Long.parseLong(jwt.getSubject());
         accountService.transfer(fromUserId, request.getToUserId(), request.getAmount());
     }
 }
