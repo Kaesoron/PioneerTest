@@ -27,7 +27,7 @@ Spring Boot-приложение для управления банковски�
 
 ### 2. Запуск через Docker Compose
 
-    docker-compose up --build
+    docker-compose up -d --build
 
 Это:
 
