@@ -91,11 +91,18 @@
             <version>2.8.6</version>
         </dependency>
 
-        <!-- Docker Java (если нужен) -->
+        <!-- Docker Java -->
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java-core</artifactId>
             <version>3.5.0</version>
+        </dependency>
+
+        <!-- Для корректной сборки jar-ника -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.2.Final</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -144,6 +151,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal> <!-- Для упаковки jar с манифестом -->
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <!-- Compiler plugin -->
             <plugin>
